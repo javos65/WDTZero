@@ -1,4 +1,4 @@
-# WDTZero V1.2.0
+# WDTZero V1.3.0
 Allows to use the WatchDog functionality for Arduino Zero, MKRZero and MKR1000 only
 
 
@@ -14,5 +14,7 @@ Defines Watchdog Class 'WDTZero' to Setup Watchdog timer in Normal mode with Ear
      - for stalled software, generates a reset if software loop does not clear WDT on time
      - Total soft-WDT intervals are 8,16,32 Seconds ,1,2,4,8.16 Minutes
  
+* V1.3.0 - added shutdown function for soft-watchdog : now possible to do an extra job before shutting down like saving your key data *thnks to Juraj
+
 Released into the public domain.
 
