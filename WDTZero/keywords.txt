@@ -3,7 +3,9 @@ WDTZero	KEYWORD1
 
 clear	KEYWORD2
 setup	KEYWORD2
-WDTZeroCounter	KEYWORD2
+attachShutdown KEYWORD2
+detachShutdown KEYWORD2
+WDTZeroCounter KEYWORD2
 
 WDT_OFF	LITERAL1
 
