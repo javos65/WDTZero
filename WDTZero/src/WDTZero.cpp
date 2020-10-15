@@ -86,9 +86,10 @@ WDTZeroCounter = _ewtcounter;            // SET Software EWT counter - used in I
 }
 
 void WDTZero::clear() {
-  WDT->CLEAR.reg = WDT_CLEAR_CLEAR_KEY;      // Clear WTD bit
-  while(WDT->STATUS.bit.SYNCBUSY);
-  WDTZeroCounter = _ewtcounter;         // Reset the early warning downcounter value
+  if(WDT->STATUS.bit.SYNCBUSY == false) { /* synchronization is not busy, meaning it is synchronized */
+    WDT->CLEAR.reg = WDT_CLEAR_CLEAR_KEY; /* reset watchdog timer */
+    WDTZeroCounter = _ewtcounter;         // Reset the early warning downcounter value
+  }
 }
 
 void WDT_Handler(void) {  // ISR for watchdog early warning, DO NOT RENAME!, need to clear
