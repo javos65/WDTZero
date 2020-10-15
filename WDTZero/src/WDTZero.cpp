@@ -86,17 +86,29 @@ WDTZeroCounter = _ewtcounter;            // SET Software EWT counter - used in I
 }
 
 void WDTZero::clear() {
-  WDT->CLEAR.reg = WDT_CLEAR_CLEAR_KEY;      // Clear WTD bit
-  while(WDT->STATUS.bit.SYNCBUSY);
-  WDTZeroCounter = _ewtcounter;         // Reset the early warning downcounter value
+  if (WDT->STATUS.bit.SYNCBUSY == false)
+  {                                       // synchronization is not busy, meaning it is synchronized
+    WDT->CLEAR.reg = WDT_CLEAR_CLEAR_KEY; // Clear WDT bit (reset watchdog timer)
+    WDTZeroCounter = _ewtcounter;         // Reset the early warning downcounter value
+  }
+}
+
+void WDTZero::reboot()
+{
+  WDT_ForceShutdown();
+}
+
+void WDT_ForceShutdown()
+{
+  WDT->CLEAR.reg = 0xFF; // value different than WDT_CLEAR_CLEAR_KEY causes reset
+  while (true);
 }
 
 void WDT_Handler(void) {  // ISR for watchdog early warning, DO NOT RENAME!, need to clear
   WDTZeroCounter--;                          // EWT down counter, makes multi cycle WDT possible
   if (WDTZeroCounter<=0) {                   // Software EWT counter run out of time : Reset
          if (WDT_Shutdown != NULL) WDT_Shutdown(); // run extra Shutdown functions if defined
-         WDT->CLEAR.reg = 0xFF;              // value different than WDT_CLEAR_CLEAR_KEY causes reset
-         while(true);
+         WDT_ForceShutdown();
          }
  else {
         WDT->INTFLAG.bit.EW = 1;              // Clear INT EW Flag

@@ -48,6 +48,7 @@
 # define WDT_SOFTCYCLE16M  0xF4BA    // EW on, @8192cycles/1024 x  2^7 = 1024S    "      111 1 -> 17  minutes to be precise ...
 
 
+void WDT_ForceShutdown(void);   // Global Method for immediate shutdown
 void WDT_Handler(void);         // ISR HANDLER FOR WDT EW INTERRUPT
 extern int WDTZeroCounter;      // SOFT COUNTER FOR EXTENDING WDT TIME VIA EW INTERRUPT
 
@@ -56,6 +57,7 @@ class WDTZero
   public:
     WDTZero();
     void clear();
+    void reboot();
     void setup(unsigned int wdtzerosetup);  
     void attachShutdown(voidFuncPtr callback);
     void detachShutdown();
