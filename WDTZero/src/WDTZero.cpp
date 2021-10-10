@@ -1,4 +1,4 @@
-/*
+ /*
  * WDTZero.h - Library for watchdog on the SamD Zero series
  * Created by John V. - 2019 V 1.3.0
  *
@@ -20,25 +20,25 @@
 #include "WDTZero.h"
 
 voidFuncPtr WDT_Shutdown = NULL;
-int WDTZeroCounter; // global counter for extended WDT via EW (early Warning) ISR
+int WDTZeroCounter;  // global counter for extended WDT via EW (early Warning) ISR
 
 WDTZero::WDTZero()
 {
 }
 
-void WDTZero::setup(unsigned int wdtzerosetup)
-{
+void WDTZero::setup(unsigned int wdtzerosetup) {
   // One-time initialization of watchdog timer.
 
-  if (!wdtzerosetup)
-  {                            // code 0x00 stops the watchdog
+  if (!wdtzerosetup){                            // code 0x00 stops the watchdog
     NVIC_DisableIRQ(WDT_IRQn); // disable IRQ
     NVIC_ClearPendingIRQ(WDT_IRQn);
-    WDT->CTRLA.bit.ENABLE = 0; // Stop watchdog now!
+
 #if defined(__SAMD51__)
+    WDT->CTRLA.bit.ENABLE = 0; // Stop watchdog now!
     while (WDT->SYNCBUSY.reg)
       ;
 #else
+    WDT->CTRL.bit.ENABLE = 0; // Stop watchdog now!
     while (WDT->STATUS.bit.SYNCBUSY)
       ;
 #endif
@@ -47,6 +47,7 @@ void WDTZero::setup(unsigned int wdtzerosetup)
   {
     //Split out the bits wdtzerosetup =>  _ewtcounter=CNT[3] _w=EWen[1]  _x=DIV[4]  _y=PER[4]  _z=EW[4]
 #ifdef DBGON
+    Serial.print(wdtzerosetup,HEX); Serial.print("= w/");
     Serial.print(wdtzerosetup, HEX);
     Serial.print("= w/");
 #endif
