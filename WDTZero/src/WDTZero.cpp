@@ -101,7 +101,7 @@ void WDT_Handler(void) {  // ISR for watchdog early warning, DO NOT RENAME!, nee
  else {
         WDT->INTFLAG.bit.EW = 1;              // Clear INT EW Flag
         WDT->CLEAR.reg = WDT_CLEAR_CLEAR_KEY; // Clear WTD bit
-        while(WDT->STATUS.bit.SYNCBUSY); 
+        //while(WDT->STATUS.bit.SYNCBUSY); 
        }
 }
 
